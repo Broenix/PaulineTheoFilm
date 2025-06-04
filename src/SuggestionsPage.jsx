@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 import { Link } from "react-router-dom";
-export const TMDB_API_KEY = "4787b0870f0ed437f43d75b333537bdc";
-
+export const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 export default function SuggestionsPage() {
   const [query, setQuery] = useState("");

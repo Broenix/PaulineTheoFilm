@@ -3,7 +3,7 @@ import { supabase } from "./supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 
-const TMDB_API_KEY = "4787b0870f0ed437f43d75b333537bdc";
+export const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 export default function MovieRanker() {
   const [movies, setMovies] = useState([]);
