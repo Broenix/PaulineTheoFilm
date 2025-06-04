@@ -1,0 +1,307 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.girly .rainbow-bg {
+  background: linear-gradient(45deg, #ff8fab, #ffc2d1, #ffe5ec, #fb6f92);
+  animation: rainbowWave 6s linear infinite;
+  opacity: 0.4;
+  filter: blur(6px);
+  border-radius: 50%;
+}
+
+@keyframes rainbowWave {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+.pulse-heart {
+  position: absolute;
+  top: -1.2rem;
+  right: -1.5rem;
+  animation: pulseHeart 1.5s infinite;
+  font-size: 1.2rem;
+}
+
+@keyframes pulseHeart {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+/* Ajoute un effet de pluie d’étoiles roses */
+.sparkle::after {
+  content: "✨✨✨✨✨";
+  position: absolute;
+  left: 0;
+  top: 100%;
+  animation: fallStars 5s infinite linear;
+  font-size: 0.8rem;
+  color: #ffc2d1;
+}
+
+@keyframes fallStars {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(30px); opacity: 0; }
+}
+
+.sparkle-wrapper {
+  position: relative;
+  display: inline-block;
+  color: #ff4eb5;
+  font-weight: 900;
+  animation: pulseColor 2s infinite alternate;
+  text-shadow: 0 0 8px #ffb6e6, 0 0 12px #ffb6e6;
+}
+
+@keyframes pulseColor {
+  from {
+    color: #ff4eb5;
+    text-shadow: 0 0 5px #ffb6e6, 0 0 10px #ffb6e6;
+  }
+  to {
+    color: #fff0fa;
+    text-shadow: 0 0 12px #ff6ad5, 0 0 18px #ff6ad5;
+  }
+}
+
+.sparkle-wrapper .sparkle-star {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #fff, #ffb6e6);
+  border-radius: 50%;
+  animation: sparkleStar 1.2s infinite ease-in-out;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.sparkle-wrapper .sparkle-star:nth-child(1) {
+  top: -5px;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.sparkle-wrapper .sparkle-star:nth-child(2) {
+  top: 50%;
+  left: -10px;
+  animation-delay: 0.4s;
+}
+
+.sparkle-wrapper .sparkle-star:nth-child(3) {
+  bottom: -6px;
+  right: 15%;
+  animation-delay: 0.8s;
+}
+
+.sparkle-star {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #fff, #ffb6e6);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkleStar 2s infinite ease-in-out;
+  opacity: 0;
+}
+
+@keyframes sparkleStar {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5) rotate(360deg);
+  }
+}
+
+.dark-aura-theo {
+  position: relative;
+  text-shadow:
+    0 0 5px #000,
+    0 0 10px #000,
+    0 0 15px #111,
+    0 0 20px #222;
+  animation: auraPulse 1.5s ease-in-out infinite;
+}
+
+.aura-shadow,
+.aura-glow {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: -1;
+  background: radial-gradient(circle, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 70%);
+  filter: blur(12px);
+  opacity: 0.7;
+  animation: auraWobble 3s ease-in-out infinite;
+}
+
+.aura-glow {
+  filter: blur(25px);
+  opacity: 0.4;
+  animation-delay: 1s;
+}
+
+/* Têtes de mort animées */
+.skull {
+  position: absolute;
+  font-size: 1rem;
+  animation: floatSkull 4s infinite ease-in-out;
+  opacity: 0.6;
+}
+
+.skull-1 {
+  top: -10px;
+  left: -15px;
+  animation-delay: 0s;
+}
+
+.skull-2 {
+  top: -15px;
+  left: 20px;
+  animation-delay: 1s;
+}
+
+.skull-3 {
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 2s;
+}
+
+@keyframes floatSkull {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-8px) scale(1.1); opacity: 0.9; }
+}
+
+/* Aura */
+@keyframes auraPulse {
+  0%, 100% { text-shadow: 0 0 5px #000, 0 0 10px #000; }
+  50% { text-shadow: 0 0 15px #111, 0 0 25px #222; }
+}
+
+@keyframes auraWobble {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Fumée SVG */
+.smoke {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  z-index: -2;
+  animation: smokeRise 6s infinite ease-in-out;
+}
+
+@keyframes smokeRise {
+  0% {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10px) scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(-50%) translateY(-20px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.eye-red {
+  width: 8px;
+  height: 8px;
+  background: red;
+  border-radius: 50%;
+  box-shadow: 0 0 8px red;
+  animation: blink 1.2s infinite alternate;
+}
+
+@keyframes blink {
+  0%, 80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.background-carousel {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.25;
+  filter: brightness(1.1) blur(1px);
+}
+
+.carousel-row-wrapper {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  width: max-content;
+  animation: scroll-left 3000s linear infinite;
+}
+
+.carousel-track.right {
+  animation: scroll-right 3000s linear infinite;
+}
+
+.carousel-track img {
+  height: 150px;
+  width: auto;
+  margin-right: 16px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.scroll-row {
+  display: flex;
+  width: fit-content;
+  animation: scroll-left 60s linear infinite;
+  gap: 12px;
+  opacity: 0.25;
+  filter: blur(1px) brightness(1.1);
+  white-space: nowrap;
+}
+
+.scroll-row.reverse {
+  animation: scroll-right 70s linear infinite;
+}
+
+.scroll-row img {
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
