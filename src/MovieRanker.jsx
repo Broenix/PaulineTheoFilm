@@ -111,6 +111,7 @@ useEffect(() => {
     setResults(data.results || []);
   };
 
+  
   const handleSubmitMovie = async () => {
     if (!selectedMovie || isNaN(parseInt(rank))) return;
 
@@ -232,19 +233,19 @@ useEffect(() => {
 
 
         {results.length > 0 && !selectedMovie && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
-            {results.slice(0, 6).map((movie) => (
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-4 max-h-[400px] overflow-y-auto pr-1">
+            {results.map((movie) => (
               <div
                 key={movie.id}
                 onClick={() => setSelectedMovie(movie)}
-                className="cursor-pointer border rounded shadow p-2 bg-[#ffc2d1] hover:bg-[#ffb3c6]"
+                className="cursor-pointer border rounded shadow p-1 bg-[#ffc2d1] hover:bg-[#ffb3c6]"
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
                   alt={movie.title}
-                  className="w-full h-auto rounded"
+                  className="w-full h-[150px] object-cover rounded"
                 />
-                <p className="text-sm mt-2 text-center font-semibold">{movie.title}</p>
+                <p className="text-xs mt-1 text-center font-semibold">{movie.title}</p>
               </div>
             ))}
           </div>
