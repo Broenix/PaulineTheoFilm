@@ -15,6 +15,7 @@ export default function StatsPage() {
   const [movies, setMovies] = useState([]);
   const [genreData, setGenreData] = useState([]);
   const [dodoCounts, setDodoCounts] = useState({ theo: 0, pauline: 0 });
+  const [maxPartsMovie, setMaxPartsMovie] = useState(null);
   const [placeCounts, setPlaceCounts] = useState({
     theo: 0,
     pauline: 0,
@@ -39,6 +40,13 @@ export default function StatsPage() {
       const { data } = await supabase.from("film").select("*");
       if (!data) return;
       setMovies(data);
+
+      const filmPlusLong = data.reduce((prev, curr) => {
+        if ((curr.viewing_parts || 1) > (prev.viewing_parts || 1)) return curr;
+        return prev;
+      }, data[0]);
+
+      setMaxPartsMovie(filmPlusLong);
 
       // Genre data for pie chart
       const genreCount = {};
@@ -186,6 +194,9 @@ if (suggestions) {
             <p className="text-sm text-[#003049]">💀 Films proposés par Théo : <strong>{suggestionStats.totalTheo}</strong></p>
             <p className="text-sm text-[#003049]">✅ Films de Pauline vus : <strong>{suggestionStats.viewedPauline}</strong></p>
             <p className="text-sm text-[#003049]">✅ Films de Théo vus : <strong>{suggestionStats.viewedTheo}</strong></p>
+            {maxPartsMovie && (
+              <p className="text-sm text-[#003049]">🧩 Film vu en le plus de fois : <strong>{maxPartsMovie.title}</strong> ({maxPartsMovie.viewing_parts || 1} fois)</p>
+            )}
         </div>
       </div>
     </div>

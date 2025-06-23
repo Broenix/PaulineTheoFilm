@@ -17,6 +17,8 @@ export default function MovieRanker() {
     custom_place: "",
     theo_slept: false,
     pauline_slept: false,
+    viewing_parts: 1,
+    viewing_multiple: false,
   });
   const [showRankHint, setShowRankHint] = useState(false);
   const [addedCounter, setAddedCounter] = useState(1);
@@ -135,7 +137,8 @@ useEffect(() => {
       genre: detail.genres.map((g) => g.name).join(", "),
       added_at: new Date().toISOString(),
       theo_slept: formData.theo_slept,
-      pauline_slept: formData.pauline_slept
+      pauline_slept: formData.pauline_slept,
+      viewing_parts: formData.viewing_parts || 1,
     };
 
     const { error } = await supabase.from("film").insert([newFilm]);
@@ -339,6 +342,38 @@ useEffect(() => {
       </label>
     </div>
 
+    <div className="flex items-center gap-4 mt-4">
+      <label className="text-sm text-[#003049] flex items-center">
+        <input
+          type="checkbox"
+          checked={formData.viewing_multiple}
+          onChange={(e) =>
+            setFormData((f) => ({
+              ...f,
+              viewing_multiple: e.target.checked,
+              viewing_parts: e.target.checked ? 2 : 1,
+            }))
+          }
+          className="mr-2"
+        />
+        🎬 Vu en plusieurs fois ?
+      </label>
+
+      {formData.viewing_multiple && (
+        <input
+          type="number"
+          min="2"
+          className="border p-2 rounded bg-[#fdf0d5] shadow-inner w-24"
+          value={formData.viewing_parts}
+          onChange={(e) =>
+            setFormData((f) => ({ ...f, viewing_parts: parseInt(e.target.value) }))
+          }
+          placeholder="Nb"
+        />
+      )}
+    </div>
+
+
     <button
       onClick={handleSubmitMovie}
       className="w-full mt-4 px-6 py-3 bg-[#ffb703] text-[#023047] font-bold rounded-full hover:bg-[#fb8500] transition-transform hover:scale-105 shadow-md"
@@ -409,6 +444,7 @@ useEffect(() => {
               <p className="text-gray-500">🎞️ {movie.genre}</p>
               <p className="text-gray-500">🛏️ Théo : {movie.theo_slept ? "Oui" : "Non"}</p>
               <p className="text-gray-500">🛌 Pauline : {movie.pauline_slept ? "Oui" : "Non"}</p>
+              <p className="text-gray-500">🎬 Vu en {movie.viewing_parts || 1} fois</p>
             </div>
           </div>
         </motion.div>
