@@ -3,6 +3,9 @@ import StatsPage from "./StatsPage";
 import { Routes, Route } from "react-router-dom";
 import { BackgroundCarousel } from "./BackgroundCarousel";
 import SuggestionsPage from "./SuggestionsPage";
+import SerieRanker from "./SerieRanker";
+import SerieStatsPage from "./SerieStatsPage";
+import SerieSuggestionsPage from "./SerieSuggestionsPage";
 
 
 export default function App() {
@@ -16,6 +19,9 @@ export default function App() {
           <Route path="/" element={<MovieRanker />} />
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/suggestions" element={<SuggestionsPage />} />
+          <Route path="/series" element={<SerieRanker />} />
+          <Route path="/series-stats" element={<SerieStatsPage />} />
+          <Route path="/series-suggestions" element={<SerieSuggestionsPage />} />
         </Routes>
       </div>
     </>
