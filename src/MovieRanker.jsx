@@ -160,7 +160,7 @@ useEffect(() => {
       setResults([]);
       setRank("");
       setSelectedMovie(null);
-      setFormData({ watched_at: "", watched_place: "Chez Théo", custom_place: "", theo_slept: false, pauline_slept: false });
+      setFormData({ watched_at: "", watched_place: "Chez Théo", custom_place: "", theo_slept: false, pauline_slept: false, viewing_parts: 1, viewing_multiple: false });
     }
   };
 
@@ -496,3 +496,4 @@ useEffect(() => {
     </div>
   );
 }
+
