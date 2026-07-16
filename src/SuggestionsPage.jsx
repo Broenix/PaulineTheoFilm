@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 import { supabase } from "./supabaseClient";
-import { Link } from "react-router-dom";
 export const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 export default function SuggestionsPage() {
@@ -179,21 +178,6 @@ const handleSuggest = async () => {
       <h1 className="text-3xl font-playfair text-center text-[#003049] mb-6">
         🎁 Propositions de films
       </h1>
-      <div className="flex justify-center gap-4 mb-6">
-  <Link
-    to="/"
-    className="inline-block text-sm px-4 py-2 rounded-full bg-[#8ecae6] text-[#023047] font-semibold shadow hover:bg-[#219ebc] transition"
-  >
-    🎬 Retour au classement
-  </Link>
-  <Link
-    to="/stats"
-    className="inline-block text-sm px-4 py-2 rounded-full bg-[#ffb703] text-[#023047] font-semibold shadow hover:bg-[#fb8500] transition"
-  >
-    📊 Voir les stats
-  </Link>
-</div>
-
 
       {/* Barre de recherche */}
       <div className="max-w-md mx-auto mb-4 relative">
