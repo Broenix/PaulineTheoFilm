@@ -6,6 +6,7 @@ import SuggestionsPage from "./SuggestionsPage";
 import SerieRanker from "./SerieRanker";
 import SerieStatsPage from "./SerieStatsPage";
 import SerieSuggestionsPage from "./SerieSuggestionsPage";
+import { Navbar } from "./Navbar";
 
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
         <BackgroundCarousel />
       </div>
       <div className="relative z-10">
+        <Navbar />
         <Routes>
           <Route path="/" element={<MovieRanker />} />
           <Route path="/stats" element={<StatsPage />} />
