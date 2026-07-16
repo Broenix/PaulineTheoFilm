@@ -40,7 +40,11 @@ export function BackgroundCarousel() {
     <div className="background-carousel">
       {Array.from({ length: rowCount }).map((_, rowIdx) => {
         const shuffledPosters = shuffleArray(posters);
-        const repeated = Array(50).fill(shuffledPosters).flat(); // super long pour éviter toute saccade
+        // On répète juste assez pour remplir large la largeur d'écran en boucle,
+        // pas besoin de 50x qui génère des milliers de <img> pour rien.
+        const minRepeats = 3;
+        const repeatsForWidth = Math.ceil((window.innerWidth * 2) / (posters.length * 166)) || 1;
+        const repeated = Array(Math.max(minRepeats, repeatsForWidth)).fill(shuffledPosters).flat();
 
         return (
           <div className="carousel-row-wrapper" key={rowIdx}>
