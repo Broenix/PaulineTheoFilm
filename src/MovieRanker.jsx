@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
 
 export const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -188,24 +187,6 @@ useEffect(() => {
     suite à un accord commun<br className="hidden sm:block" />et zéro disputes.
   </h1>
 </div>
-
-<div className="flex flex-wrap justify-center gap-4 mb-8">
-  <Link
-    to="/stats"
-    className="text-sm px-4 py-2 rounded-full bg-[#ffb703] text-[#023047] font-semibold shadow hover:bg-[#fb8500] transition"
-  >
-    📊 Voir les stats
-  </Link>
-  <Link
-    to="/suggestions"
-    className="text-sm px-4 py-2 rounded-full bg-[#8ecae6] text-[#023047] font-semibold shadow hover:bg-[#219ebc] transition"
-  >
-    💡 Voir les suggestions de films
-  </Link>
-</div>
-
-
-
 
       <div className="mb-6">
 <div className="relative max-w-sm mx-auto">
