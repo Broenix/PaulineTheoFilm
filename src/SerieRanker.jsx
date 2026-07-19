@@ -21,6 +21,13 @@ function RankHint({ rank, list, labelKey }) {
   );
 }
 
+function formatSeasonDate(s) {
+  if (s.date_mode === "unknown") return `≈ ${s.approx_period || "date inconnue"}`;
+  if (s.started_at && s.ended_at && s.started_at !== s.ended_at) return `${s.started_at} → ${s.ended_at}`;
+  if (s.started_at) return s.started_at;
+  return "date non renseignée";
+}
+
 export default function SerieRanker() {
   const [mySeries, setMySeries] = useState([]); // table serie, ordonnée par rank
   const [seasonsBySerie, setSeasonsBySerie] = useState({}); // { serie_id: [seasons triées] }
@@ -37,7 +44,10 @@ export default function SerieRanker() {
 
   const [seasonNumber, setSeasonNumber] = useState("");
   const [formData, setFormData] = useState({
-    watched_at: "",
+    date_mode: "exact",
+    started_at: "",
+    ended_at: "",
+    approx_period: "",
     watched_place: "Chez Théo",
     custom_place: "",
     theo_slept: false,
@@ -113,7 +123,10 @@ export default function SerieRanker() {
     setPendingSeasonRow(null);
     setPendingSerieId(null);
     setFormData({
-      watched_at: "",
+      date_mode: "exact",
+      started_at: "",
+      ended_at: "",
+      approx_period: "",
       watched_place: "Chez Théo",
       custom_place: "",
       theo_slept: false,
@@ -135,7 +148,10 @@ export default function SerieRanker() {
 
     const row = {
       season_number: parseInt(seasonNumber),
-      watched_at: formData.watched_at,
+      date_mode: formData.date_mode,
+      started_at: formData.date_mode === "exact" ? (formData.started_at || null) : null,
+      ended_at: formData.date_mode === "exact" ? (formData.ended_at || null) : null,
+      approx_period: formData.date_mode === "unknown" ? (formData.approx_period || null) : null,
       watched_place: place,
       theo_slept: formData.theo_slept,
       pauline_slept: formData.pauline_slept,
@@ -236,8 +252,8 @@ export default function SerieRanker() {
     .flatMap(([serieId, seasons]) =>
       seasons.map((s) => ({ ...s, serie: mySeries.find((m) => m.id === parseInt(serieId)) }))
     )
-    .filter((r) => r.watched_at)
-    .sort((a, b) => new Date(a.watched_at) - new Date(b.watched_at));
+    .filter((r) => r.started_at || r.approx_period)
+    .sort((a, b) => new Date(a.started_at || "9999-12-31") - new Date(b.started_at || "9999-12-31"));
 
   return (
     <div className="max-w-5xl mx-auto p-4 bg-[#fdf0d5] min-h-screen">
@@ -315,17 +331,57 @@ export default function SerieRanker() {
             </select>
           </label>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <label className="flex flex-col text-sm font-medium text-[#003049]">
-              📅 Date :
-              <input
-                type="date"
-                className="border p-2 mt-1 rounded-md bg-[#fdf0d5] shadow-inner"
-                value={formData.watched_at}
-                onChange={(e) => setFormData((f) => ({ ...f, watched_at: e.target.value }))}
-              />
-            </label>
+          <div>
+            <div className="flex gap-2 mb-2">
+              <button
+                type="button"
+                onClick={() => setFormData((f) => ({ ...f, date_mode: "exact" }))}
+                className={`text-sm px-3 py-1 rounded-full border ${formData.date_mode === "exact" ? "bg-[#ffb703] text-[#023047] font-bold" : "bg-[#fdf0d5] text-[#333]"}`}
+              >
+                📅 Dates précises
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData((f) => ({ ...f, date_mode: "unknown" }))}
+                className={`text-sm px-3 py-1 rounded-full border ${formData.date_mode === "unknown" ? "bg-[#ffb703] text-[#023047] font-bold" : "bg-[#fdf0d5] text-[#333]"}`}
+              >
+                🤷 Date non déterminée
+              </button>
+            </div>
 
+            {formData.date_mode === "exact" ? (
+              <div className="grid grid-cols-2 gap-3">
+                <label className="flex flex-col text-sm font-medium text-[#003049]">
+                  Début (1er épisode) :
+                  <input
+                    type="date"
+                    className="border p-2 mt-1 rounded-md bg-[#fdf0d5] shadow-inner"
+                    value={formData.started_at}
+                    onChange={(e) => setFormData((f) => ({ ...f, started_at: e.target.value }))}
+                  />
+                </label>
+                <label className="flex flex-col text-sm font-medium text-[#003049]">
+                  Fin (dernier épisode) :
+                  <input
+                    type="date"
+                    className="border p-2 mt-1 rounded-md bg-[#fdf0d5] shadow-inner"
+                    value={formData.ended_at}
+                    onChange={(e) => setFormData((f) => ({ ...f, ended_at: e.target.value }))}
+                  />
+                </label>
+              </div>
+            ) : (
+              <input
+                type="text"
+                placeholder="ex: Été 2024, fin 2023..."
+                className="border p-2 rounded-md bg-[#fdf0d5] shadow-inner w-full"
+                value={formData.approx_period}
+                onChange={(e) => setFormData((f) => ({ ...f, approx_period: e.target.value }))}
+              />
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <label className="flex flex-col text-sm font-medium text-[#003049]">
               📍 Lieu :
               <select
@@ -479,7 +535,7 @@ export default function SerieRanker() {
                   <p className="text-gray-500 text-xs mt-1">{seasons.length} saison{seasons.length > 1 ? "s" : ""} vue{seasons.length > 1 ? "s" : ""} :</p>
                   {seasons.map((s) => (
                     <p key={s.id} className="text-gray-500 text-xs">
-                      • S{s.season_number} (#{s.rank_in_serie}) — {s.watched_at}
+                      • S{s.season_number} (#{s.rank_in_serie}) — {formatSeasonDate(s)}
                     </p>
                   ))}
                 </div>
@@ -516,7 +572,7 @@ export default function SerieRanker() {
                         <p className="text-gray-500">🎞️ {show.genre}</p>
                         {seasons.map((s) => (
                           <p key={s.id} className="text-gray-500 text-xs">
-                            S{s.season_number} (#{s.rank_in_serie}) — {s.watched_at} — {s.watched_place}
+                            S{s.season_number} (#{s.rank_in_serie}) — {formatSeasonDate(s)} — {s.watched_place}
                           </p>
                         ))}
                       </div>
@@ -538,7 +594,7 @@ export default function SerieRanker() {
                 {row.serie?.title} — Saison {row.season_number}
               </span>
               <p className="text-xs text-gray-500">
-                📅 {row.watched_at} · 📍 {row.watched_place} · classée #{row.rank_in_serie} de sa série
+                📅 {formatSeasonDate(row)} · 📍 {row.watched_place} · classée #{row.rank_in_serie} de sa série
               </p>
             </li>
           ))}
