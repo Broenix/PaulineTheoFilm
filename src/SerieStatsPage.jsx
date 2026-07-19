@@ -22,6 +22,7 @@ export default function SerieStatsPage() {
   const [totalDuration, setTotalDuration] = useState(0);
   const [totalEpisodes, setTotalEpisodes] = useState(0);
   const [seriesCount, setSeriesCount] = useState(0);
+  const [longestWatch, setLongestWatch] = useState(null);
 
   useEffect(() => {
     const fetch = async () => {
@@ -71,11 +72,19 @@ export default function SerieStatsPage() {
       const byYear = {};
       let duration = 0;
       let episodes = 0;
+      let longestWatch = null; // saison qui a mis le plus de jours à être finie
       seasons.forEach((s) => {
         if (s.approx_total_minutes) duration += s.approx_total_minutes;
         if (s.episode_count) episodes += s.episode_count;
-        if (!s.watched_at) return;
-        const date = new Date(s.watched_at);
+        if (s.started_at && s.ended_at) {
+          const days = Math.round((new Date(s.ended_at) - new Date(s.started_at)) / 86400000);
+          if (days > 0 && (!longestWatch || days > longestWatch.days)) {
+            const serie = series.find((se) => se.id === s.serie_id);
+            longestWatch = { days, title: serie?.title, season_number: s.season_number };
+          }
+        }
+        if (!s.started_at) return;
+        const date = new Date(s.started_at);
         const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
         const yearKey = `${date.getFullYear()}`;
         byMonth[monthKey] = (byMonth[monthKey] || 0) + 1;
@@ -83,6 +92,7 @@ export default function SerieStatsPage() {
       });
       setTotalDuration(duration);
       setTotalEpisodes(episodes);
+      setLongestWatch(longestWatch);
       const thisMonthKey = `${now.getFullYear()}-${now.getMonth() + 1}`;
       setFrequencies({
         thisMonth: byMonth[thisMonthKey] || 0,
@@ -158,9 +168,11 @@ export default function SerieStatsPage() {
           {maxSeasonsSerie && (
             <p className="text-sm text-[#003049]">🧩 Série la plus suivie : <strong>{maxSeasonsSerie.title}</strong> ({maxSeasonsSerie.seasonsWatched} saison{maxSeasonsSerie.seasonsWatched > 1 ? "s" : ""} vue{maxSeasonsSerie.seasonsWatched > 1 ? "s" : ""})</p>
           )}
+          {longestWatch && (
+            <p className="text-sm text-[#003049]">🐌 A mis le plus de temps à être finie : <strong>{longestWatch.title}</strong> saison {longestWatch.season_number} ({longestWatch.days} jour{longestWatch.days > 1 ? "s" : ""})</p>
+          )}
         </div>
       </div>
     </div>
   );
 }
-
